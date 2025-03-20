@@ -1,203 +1,839 @@
-/* Import Futuristic Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Electrolize&family=Rajdhani:wght@400;700&display=swap');
+// 🔥 Custom Cursor Effect
+const cursor = document.createElement('div');
+cursor.classList.add('cursor');
+document.body.appendChild(cursor);
 
-/* Basic reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  cursor: none; /* Hide default cursor */
+const trail = document.createElement('div');
+trail.classList.add('cursor-trail');
+document.body.appendChild(trail);
+
+document.addEventListener('mousemove', (e) => {
+  cursor.style.left = `${e.clientX}px`;
+  cursor.style.top = `${e.clientY}px`;
+  trail.style.left = `${e.clientX}px`;
+  trail.style.top = `${e.clientY}px`;
+});
+
+// 🔥 Floating Particles Effect
+const particlesContainer = document.createElement('div');
+particlesContainer.classList.add('particles');
+document.body.appendChild(particlesContainer);
+
+for (let i = 0; i < 30; i++) {
+  let particle = document.createElement('div');
+  particle.style.width = "5px";
+  particle.style.height = "5px";
+  particle.style.background = "rgba(0, 255, 255, 0.5)";
+  particle.style.position = "absolute";
+  particle.style.top = `${Math.random() * 100}vh`;
+  particle.style.left = `${Math.random() * 100}vw`;
+  particle.style.borderRadius = "50%";
+  particle.style.animation = `moveParticle ${3 + Math.random() * 5}s infinite linear`;
+  particlesContainer.appendChild(particle);
 }
 
-body {
-  font-family: 'Electrolize', sans-serif;
-  background-color: #0a0a0a;
-  color: white;
-  text-align: center;
-  overflow: hidden;
+// 🔥 NFT Scrolling Carousel
+const nftImages = Array.from({ length: 30 }, (_, i) => `https://via.placeholder.com/200?text=NFT+${i + 1}`);
+const carousel = document.getElementById("nftCarousel");
+
+function loadNFTImages() {
+  carousel.innerHTML = "";
+  const totalImages = nftImages.length * 2;
+  for (let i = 0; i < totalImages; i++) {
+    let img = document.createElement("img");
+    img.src = nftImages[i % nftImages.length];
+    carousel.appendChild(img);
+  }
+}
+loadNFTImages();
+
+// Infinite scrolling
+setInterval(() => {
+  carousel.scrollLeft += 1;
+  if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
+    carousel.scrollLeft = 0;
+  }
+}, 30);
+
+// 🔥 Token Scrolling Display (Now Auto-Scrolling!)
+const tokenData = [
+  { name: "MoonToken", symbol: "MOON", description: "A token for intergalactic traders.", image: "https://via.placeholder.com/100" },
+  { name: "DogeBoost", symbol: "DOGE", description: "Powered by memes and rockets.", image: "https://via.placeholder.com/100" },
+  { name: "GigaToken", symbol: "GIGA", description: "Biggest brain in the crypto world.", image: "https://via.placeholder.com/100" }
+];
+
+let currentIndex = 0;
+const tokenName = document.getElementById("tokenName");
+const tokenDescription = document.getElementById("tokenDescription");
+const tokenImage = document.getElementById("tokenImage");
+const prevToken = document.getElementById("prevToken");
+const nextToken = document.getElementById("nextToken");
+
+function updateTokenDisplay(index) {
+  const token = tokenData[index];
+  tokenName.innerHTML = `${token.name} (${token.symbol})`;
+  tokenDescription.innerHTML = token.description;
+  tokenImage.src = token.image;
+}
+updateTokenDisplay(currentIndex);
+
+// Manual scrolling
+prevToken.onclick = () => { 
+  currentIndex = (currentIndex - 1 + tokenData.length) % tokenData.length; 
+  updateTokenDisplay(currentIndex); 
+};
+
+nextToken.onclick = () => { 
+  currentIndex = (currentIndex + 1) % tokenData.length; 
+  updateTokenDisplay(currentIndex); 
+};
+
+// **Auto-Scrolling Tokens**
+setInterval(() => {
+  currentIndex = (currentIndex + 1) % tokenData.length;
+  updateTokenDisplay(currentIndex);
+}, 5000); // Scrolls every 5 seconds
+
+// Restore Button Functionality
+let connectButton = document.getElementById("connectButton");
+let mintButton = document.getElementById("mintButton");
+let claimButton = document.getElementById("claimButton");
+
+const contractAddress = "0xf70DD18ae305442659513c28A2eE44566bD0DEbd";
+const abi = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "ERC721IncorrectOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721InsufficientApproval",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "approver",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidApprover",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidOperator",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidReceiver",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidSender",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721NonexistentToken",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "OwnableInvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "OwnableUnauthorizedAccount",
+		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "approved",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "ApprovalForAll",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "MAX_MINT_PER_TX",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "MAX_TOKENS",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "baseExtension",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "baseUri",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "flipSaleState",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getApproved",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "isApprovedForAll",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "isSaleActive",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_numTokens",
+				"type": "uint256"
+			}
+		],
+		"name": "mint",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ownerOf",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "price",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "setApprovalForAll",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_baseUri",
+				"type": "string"
+			}
+		],
+		"name": "setBaseUri",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			}
+		],
+		"name": "setPrice",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes4",
+				"name": "interfaceId",
+				"type": "bytes4"
+			}
+		],
+		"name": "supportsInterface",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawAll",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	}
+];
+
+async function connectWallet() {
+  if (typeof window.ethereum !== "undefined") {
+      try {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          await provider.send("eth_requestAccounts", []); // Request wallet access
+          const signer = provider.getSigner();
+          const userAddress = await signer.getAddress();
+
+          // Ensure walletAddress element exists
+          const walletDisplay = document.getElementById("walletAddress");
+          if (!walletDisplay) {
+              console.warn("⚠️ Element #walletAddress not found in the HTML.");
+              return;
+          }
+
+          walletDisplay.innerText = `Connected: ${userAddress}`;
+          console.log("✅ Wallet Connected:", userAddress);
+          alert(`Wallet connected: ${userAddress}`);
+      } catch (error) {
+          console.error("❌ Wallet Connection Error:", error);
+          alert("Failed to connect wallet. Check console for details.");
+      }
+  } else {
+      alert("❌ MetaMask is not installed. Please install MetaMask.");
+  }
 }
 
-/* 🔥 Animated Background (Neon Waves + Moving Nebula + Particles) */
-.animated-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 10%, rgba(0, 0, 0, 1) 90%);
-  z-index: -2;
-  animation: neonWaves 10s infinite alternate;
+// Attach event listener to the button
+document.getElementById("connectButton").addEventListener("click", connectWallet);
+
+
+
+// Attach event listener to connect button
+document.getElementById("connectButton").addEventListener("click", connectWallet);
+
+
+document.getElementById("connectButton").addEventListener("click", connectWallet);
+
+// Mint NFT
+async function mintNFT() {
+    if (!window.ethereum) return alert("MetaMask is required.");
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+    try {
+        const price = ethers.utils.parseEther("0.1"); // 0.1 ETH per NFT
+        const tx = await contract.mint(1, { value: price });
+        await tx.wait();
+        alert("NFT Minted Successfully!");
+    } catch (error) {
+        console.error("Minting error:", error);
+        alert("Minting failed. Ensure sale is active and you have enough ETH.");
+    }
 }
 
-@keyframes neonWaves {
-  0% { background-position: 0% 0%; opacity: 0.9; }
-  100% { background-position: 100% 100%; opacity: 1; }
+document.getElementById("mintButton").addEventListener("click", mintNFT);
+
+// Claim Airdrop (Placeholder, if exists)
+async function claimAirdrop() {
+    if (!window.ethereum) return alert("MetaMask is required.");
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+    try {
+        const tx = await contract.claimAirdrop(); // Ensure this function exists
+        await tx.wait();
+        alert("Airdrop Claimed Successfully!");
+    } catch (error) {
+        console.error("Airdrop claim error:", error);
+        alert("Airdrop claim failed.");
+    }
 }
 
-/* 🌌 Moving Nebula Effect */
-.nebula {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://www.transparenttextures.com/patterns/foggy-birds.png'); /* Soft fog effect */
-  opacity: 0.15;
-  animation: moveNebula 20s infinite alternate linear;
-  z-index: -1;
-}
-
-@keyframes moveNebula {
-  0% { transform: translateX(0px) translateY(0px); }
-  100% { transform: translateX(50px) translateY(50px); }
-}
-
-/* ✨ Floating Particles */
-.particles {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* 🚀 Cyberpunk Title */
-.project-title {
-  font-size: 3.5rem;
-  font-weight: bold;
-  font-family: 'Orbitron', sans-serif;
-  color: #00ffff;
-  text-shadow: 0px 0px 20px rgba(0, 255, 255, 1);
-  text-transform: uppercase;
-}
-
-/* 🚀 Buttons (Glowing with Pulsing Effect) */
-button {
-  display: block;
-  margin: 15px auto;
-  padding: 12px 24px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  border-radius: 8px;
-  border: none;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-family: 'Rajdhani', sans-serif;
-  color: white;
-  box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5);
-  animation: pulseGlow 1.5s infinite alternate;
-}
-
-@keyframes pulseGlow {
-  0% { box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5); }
-  100% { box-shadow: 0px 0px 25px rgba(255, 255, 255, 1); }
-}
-
-#connectButton {
-  background: linear-gradient(45deg, #ff0000, #ff7300);
-}
-
-#mintButton {
-  background: linear-gradient(45deg, #00ff99, #0099ff);
-}
-
-#claimButton {
-  background: linear-gradient(45deg, #ffdd00, #ff8800);
-}
-
-button:hover {
-  transform: scale(1.1);
-  filter: brightness(1.3);
-}
-
-/* 🚀 NFT Scrolling Carousel */
-.carousel {
-  width: 90%;
-  max-width: 1200px;
-  overflow: hidden;
-  white-space: nowrap;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  position: relative;
-}
-
-.carousel img {
-  width: 200px;
-  height: 200px;
-  margin: 10px;
-  border-radius: 25px;
-  transition: transform 0.3s ease-in-out;
-  box-shadow: 0px 0px 15px #00ffcc;
-}
-
-.carousel img:hover {
-  transform: scale(1.1);
-}
-
-/* 🚀 Token Display */
-.token-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 30px;
-}
-
-.token-display {
-  width: 500px;
-  height: 250px;
-  background: linear-gradient(145deg, #1e1e1e, #292929);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  transition: transform 0.5s ease-in-out;
-  box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.5);
-}
-
-.token-display:hover {
-  transform: scale(1.05);
-}
-
-/* 🚀 Arrows */
-.arrow {
-  font-size: 2rem;
-  background: none;
-  color: white;
-  border: none;
-  cursor: none;
-  transition: transform 0.2s ease;
-  margin: 0px 5px;
-}
-
-.arrow:hover {
-  transform: scale(1.3);
-}
-
-/* 🔥 Custom Cursor */
-.cursor {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(0, 255, 255, 0.7);
-  box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.9);
-  position: absolute;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  transition: transform 0.1s ease-out;
-}
-
-/* 🔥 Cursor Distortion Effect */
-.cursor-trail {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(0, 255, 255, 0.2);
-  position: absolute;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  transition: transform 0.3s ease-out;
-}
+document.getElementById("claimButton").addEventListener("click", claimAirdrop);
