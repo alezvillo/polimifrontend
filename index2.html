@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Picarreta Web3 Frontend</title>
+  <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+  <div class="animated-bg"></div> <!-- Animated Background -->
+
+  <header>
+    <h1 class="project-title">FINTECH PROJECT</h1>
+  </header>
+
+  <div class="content">
+    <!-- Wallet connection -->
+    <div id="walletConnect">
+      <button id="connectButton">Connect Wallet</button>
+    </div>
+
+    <!-- Mint NFT -->
+    <div id="mintNFT">
+      <button id="mintButton">Mint NFT</button>
+    </div>
+
+    <!-- Claim Airdrop -->
+    <div id="claimAirdrop">
+      <button id="claimButton">Claim Airdrop</button>
+    </div>
+
+    <!-- NFT Image Scrolling -->
+    <div id="nftCarousel" class="carousel">
+      <!-- Images will be added dynamically via JavaScript -->
+    </div>
+
+    <!-- Token Scrolling Display -->
+    <div class="token-container">
+      <button id="prevToken" class="arrow">◄</button> <!-- Left arrow -->
+      
+      <div class="token-display" id="tokenCard">
+        <div class="token-info">
+          <h2 id="tokenName"></h2>
+          <p id="tokenDescription"></p>
+        </div>
+        <img id="tokenImage" src="" alt="Token Image">
+      </div>
+
+      <button id="nextToken" class="arrow">►</button> <!-- Right arrow -->
+    </div>
+  </div>
+
+  <script src="script2.js"></script>
+</body>
+</html>
+
+
