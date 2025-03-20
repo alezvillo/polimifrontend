@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Picarreta Web3 Frontend</title>
+  <title>Web3 Frontend</title>
   <link rel="stylesheet" href="style2.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.umd/ethers.umd.min.js"></script>
 </head>
 <body>
   <div class="animated-bg"></div> <!-- Animated Background -->
@@ -17,7 +18,10 @@
     <!-- Wallet connection -->
     <div id="walletConnect">
       <button id="connectButton">Connect Wallet</button>
+      <p id="walletAddress">Not Connected</p>
     </div>
+    
+    
 
     <!-- Mint NFT -->
     <div id="mintNFT">
@@ -49,9 +53,16 @@
       <button id="nextToken" class="arrow">►</button> <!-- Right arrow -->
     </div>
   </div>
+  <!-- Add ethers.js from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
+  <!-- Now, your script can access ethers.js -->
   <script src="script2.js"></script>
+  
 </body>
 </html>
+
+
+
 
 
